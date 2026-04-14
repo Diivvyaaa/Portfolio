@@ -64,7 +64,7 @@ const EMPTY_FORM = {
 };
 
 const defaultAvatar = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"%3E%3Crect width="120" height="120" fill="%23212b38"/%3E%3Ccircle cx="60" cy="40" r="24" fill="%2354d084"/%3E%3Cpath d="M30 104c0-18 14-32 30-32s30 14 30 32" fill="%2354d084"/%3E%3C/svg%3E';
-const OWNER_PASSWORD = "Divya"; // Replace this with your own owner password
+const OWNER_PASSWORD = import.meta.env.VITE_OWNER_PASSWORD; 
 
 // ─── Styles ──────────────────────────────────────────────────────────────────
 
