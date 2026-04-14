@@ -594,13 +594,32 @@ function Modal({ open, editIndex, initialData, onClose, onSave }) {
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => set("image", ev.target.result);
-    reader.readAsDataURL(file);
+const handleImage = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  // Compress before converting to base64
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const reader = new FileReader();
+  
+  reader.onload = (ev) => {
+    img.onload = () => {
+      // Resize to max 800px wide
+      const maxW = 800;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Compress to 60% quality JPEG
+      const compressed = canvas.toDataURL('image/jpeg', 0.6);
+      set("image", compressed);
+    };
+    img.src = ev.target.result;
   };
+  reader.readAsDataURL(file);
+};
 
   const handleSave = () => {
     if (!form.title.trim()) { alert("Project title is required."); return; }
