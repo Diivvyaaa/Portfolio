@@ -594,30 +594,20 @@ function Modal({ open, editIndex, initialData, onClose, onSave }) {
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
-const handleImage = (e) => {
+const handleImage = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   
-  // Compress before converting to base64
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  const reader = new FileReader();
-  
-  reader.onload = (ev) => {
-    img.onload = () => {
-      // Resize to max 800px wide
-     const maxW = 600;
-const scale = Math.min(1, maxW / img.width);
-canvas.width = img.width * scale;
-canvas.height = img.height * scale;
-ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-const compressed = canvas.toDataURL('image/jpeg', 0.4);
-      set("image", compressed);
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+  try {
+    const fileName = `${Date.now()}-${file.name}`;
+    const storageRef = ref(storage, `projects/${fileName}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    set("image", downloadURL);
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    alert('Failed to upload image. Please try again.');
+  }
 };
 
   const handleSave = () => {
@@ -687,7 +677,7 @@ const compressed = canvas.toDataURL('image/jpeg', 0.4);
           <label>Screenshot</label>
           <div className="dk-upload-zone" onClick={() => fileRef.current.click()}>
             {form.image
-              ? <img src="c:\Users\divvz\Desktop\Screenshot 2026-04-12 181559.png" alt="preview" />
+              ? <img src={form.image} alt="preview" />
               : <>
                   <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" style={{ opacity: 0.5 }}>
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
