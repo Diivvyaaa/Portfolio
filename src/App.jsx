@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -442,7 +442,7 @@ const css = `
   }
   .dk-contact-close:hover { color: var(--text); border-color: var(--text); }
 
-  /* ── TABLET (max 1024px) ── */
+  /* ── TABLET ── */
   @media (max-width: 1024px) {
     .dk-page { padding: 32px 32px; }
     .dk-nav { padding: 14px 32px; }
@@ -452,61 +452,36 @@ const css = `
     .dk-project-entry { gap: 32px; }
   }
 
-  /* ── MOBILE (max 768px) ── */
+  /* ── MOBILE ── */
   @media (max-width: 768px) {
-    /* Nav */
-    .dk-nav {
-      padding: 12px 16px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .dk-nav-tabs {
-      order: 3;
-      width: 100%;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .dk-nav { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+    .dk-nav-tabs { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
     .dk-nav-tab { padding: 6px 12px; font-size: 12px; }
     .dk-hire-btn { font-size: 12px; padding: 7px 14px; }
 
-    /* Page & Layout */
     .dk-page { padding: 24px 16px; }
-    .dk-about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .dk-about-grid { grid-template-columns: 1fr; gap: 24px; }
     .dk-about-grid > div:last-child { order: -1; }
 
-    /* Hero text */
     .dk-hero-name { font-size: 36px; }
-    .dk-hero-role { font-size: 16px; }
+    .dk-hero-role { font-size: 15px; }
     .dk-hero-bio { font-size: 13px; }
-    .dk-hero-btns { flex-wrap: wrap; }
-    .dk-btn-green, .dk-btn-outline { width: 100%; text-align: center; justify-content: center; }
+    .dk-hero-btns { flex-direction: column; }
+    .dk-btn-green, .dk-btn-outline { width: 100%; text-align: center; }
 
-    /* Contact links */
-    .dk-contact-links { flex-wrap: wrap; gap: 10px; }
-
-    /* Profile card */
     .dk-profile-card { padding: 20px 16px; }
     .dk-avatar-ring { width: 110px; height: 110px; }
 
-    /* Section headers */
     .dk-section-header h2 { font-size: 26px; }
-
-    /* Skills */
     .dk-skills-grid { grid-template-columns: 1fr; gap: 12px; }
 
-    /* Projects */
-    .dk-project-entry {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 32px 0;
-    }
+    .dk-project-entry { grid-template-columns: 1fr; gap: 24px; padding: 32px 0; }
     .dk-proj-title { font-size: 22px; }
     .dk-proj-features { grid-template-columns: 1fr; }
-    .dk-proj-actions { flex-wrap: wrap; }
+
     .dk-project-actions { flex-direction: column; align-items: stretch; gap: 12px; }
     .dk-data-actions { justify-content: center; flex-wrap: wrap; }
 
-    /* Modals */
     .dk-modal { padding: 20px 16px; }
     .dk-hire-modal { max-width: 100%; border-radius: 12px; }
     .dk-hire-header { padding: 18px 16px; }
@@ -515,7 +490,7 @@ const css = `
     .dk-contact-btn { width: 100%; text-align: center; }
   }
 
-  /* ── SMALL MOBILE (max 400px) ── */
+  /* ── SMALL MOBILE ── */
   @media (max-width: 400px) {
     .dk-hero-name { font-size: 30px; }
     .dk-nav-tab { padding: 5px 8px; font-size: 11px; }
@@ -812,16 +787,14 @@ useEffect(() => {
   loadProjects();
 }, []);
 
-  // Load avatar from Firestore on mount
+  // ── Load avatar from Firestore (works on ALL devices) ──
   useEffect(() => {
     const loadAvatar = async () => {
       try {
-        const docSnap = await getDocs(collection(db, 'settings'));
-        docSnap.docs.forEach((d) => {
-          if (d.id === 'avatar' && d.data().url) {
-            setAvatar(d.data().url);
-          }
-        });
+        const avatarDoc = await getDoc(doc(db, 'settings', 'avatar'));
+        if (avatarDoc.exists() && avatarDoc.data().url) {
+          setAvatar(avatarDoc.data().url);
+        }
       } catch (err) {
         console.error('Error loading avatar:', err);
       }
@@ -829,7 +802,7 @@ useEffect(() => {
     loadAvatar();
   }, []);
 
-  // Save avatar to Firestore
+  // ── Save avatar to Firestore when owner uploads ──
   const handleAvatar = (e) => {
     if (!isOwner) return;
     const file = e.target.files[0];
