@@ -789,9 +789,41 @@ useEffect(() => {
   loadProjects();
 }, []);
 
-;
+  // ── Load avatar from Firestore (works on ALL devices) ──
+  useEffect(() => {
+    const loadAvatar = async () => {
+      try {
+        const avatarDoc = await getDoc(doc(db, 'settings', 'avatar'));
+        if (avatarDoc.exists() && avatarDoc.data().url) {
+          setAvatar(avatarDoc.data().url);
+        }
+      } catch (err) {
+        console.error('Error loading avatar:', err);
+      }
+    };
+    loadAvatar();
+  }, []);
 
+  // ── Save avatar to Firestore when owner uploads ──
+const handleAvatar = (e) => {
+  if (!isOwner) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
+  const storageRef = ref(storage, 'avatar/profile.jpg');
+  uploadBytes(storageRef, file).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then(async (downloadURL) => {
+      setAvatar(downloadURL);
+      try {
+        await setDoc(doc(db, 'settings', 'avatar'), { url: downloadURL });
+      } catch (err) {
+        console.error('Error saving avatar URL:', err);
+      }
+    });
+  }).catch((err) => {
+    console.error('Error uploading avatar:', err);
+  });
+};
 
   const handleOwnerLogin = () => {
     if (ownerKey === OWNER_PASSWORD) {
