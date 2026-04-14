@@ -607,13 +607,12 @@ const handleImage = (e) => {
   reader.onload = (ev) => {
     img.onload = () => {
       // Resize to max 800px wide
-      const maxW = 800;
-      const scale = Math.min(1, maxW / img.width);
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      // Compress to 60% quality JPEG
-      const compressed = canvas.toDataURL('image/jpeg', 0.6);
+     const maxW = 600;
+const scale = Math.min(1, maxW / img.width);
+canvas.width = img.width * scale;
+canvas.height = img.height * scale;
+ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+const compressed = canvas.toDataURL('image/jpeg', 0.4);
       set("image", compressed);
     };
     img.src = ev.target.result;
