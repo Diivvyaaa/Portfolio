@@ -625,7 +625,12 @@ const handleImage = async (e) => {
   const handleSave = () => {
     if (!form.title.trim()) { alert("Project title is required."); return; }
     const proj = {
-      ...form,
+      title: form.title,
+      subtitle: form.subtitle,
+      desc: form.desc,
+      image: form.image,
+      github: form.github,
+      status: form.status,
       id: editIndex >= 0 ? initialData.id : Date.now(),
       features: form.features.split("\n").map(s => s.trim()).filter(Boolean),
       tags: form.tags.split(",").map(s => s.trim()).filter(Boolean),
