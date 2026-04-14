@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from './firebase';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -803,22 +805,25 @@ useEffect(() => {
   }, []);
 
   // ── Save avatar to Firestore when owner uploads ──
-  const handleAvatar = (e) => {
-    if (!isOwner) return;
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      const base64 = ev.target.result;
-      setAvatar(base64);
+const handleAvatar = (e) => {
+  if (!isOwner) return;
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const storageRef = ref(storage, 'avatar/profile.jpg');
+  uploadBytes(storageRef, file).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then(async (downloadURL) => {
+      setAvatar(downloadURL);
       try {
-        await setDoc(doc(db, 'settings', 'avatar'), { url: base64 });
+        await setDoc(doc(db, 'settings', 'avatar'), { url: downloadURL });
       } catch (err) {
-        console.error('Error saving avatar:', err);
+        console.error('Error saving avatar URL:', err);
       }
-    };
-    reader.readAsDataURL(file);
-  };
+    });
+  }).catch((err) => {
+    console.error('Error uploading avatar:', err);
+  });
+};
 
   const handleOwnerLogin = () => {
     if (ownerKey === OWNER_PASSWORD) {
