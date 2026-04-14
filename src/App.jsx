@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -812,29 +813,40 @@ useEffect(() => {
   loadProjects();
 }, []);
 
-  // Load avatar from localStorage on component mount
-  useEffect(() => {
-    const savedAvatar = localStorage.getItem('portfolio-avatar');
-    if (savedAvatar) {
-      setAvatar(savedAvatar);
+ // Load avatar from Firestore on mount
+useEffect(() => {
+  const loadAvatar = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, 'settings'));
+      snapshot.docs.forEach((d) => {
+        if (d.id === 'avatar' && d.data().url) {
+          setAvatar(d.data().url);
+        }
+      });
+    } catch (err) {
+      console.error('Error loading avatar:', err);
     }
-  }, []);
-
-  // Save avatar to localStorage whenever it changes
-  useEffect(() => {
-    if (avatar) {
-      localStorage.setItem('portfolio-avatar', avatar);
-    }
-  }, [avatar]);
-
-  const handleAvatar = (e) => {
-    if (!isOwner) return;
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => setAvatar(ev.target.result);
-    reader.readAsDataURL(file);
   };
+  loadAvatar();
+}, []);
+
+// Save avatar to Firestore (as base64)
+const handleAvatar = (e) => {
+  if (!isOwner) return;
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    const base64 = ev.target.result;
+    setAvatar(base64);
+    try {
+      await setDoc(doc(db, 'settings', 'avatar'), { url: base64 });
+    } catch (err) {
+      console.error('Error saving avatar:', err);
+    }
+  };
+  reader.readAsDataURL(file);
+};
 
   const handleOwnerLogin = () => {
     if (ownerKey === OWNER_PASSWORD) {
