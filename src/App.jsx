@@ -687,7 +687,7 @@ const compressed = canvas.toDataURL('image/jpeg', 0.4);
           <label>Screenshot</label>
           <div className="dk-upload-zone" onClick={() => fileRef.current.click()}>
             {form.image
-              ? <img src={form.image} alt="preview" />
+              ? <img src="c:\Users\divvz\Desktop\Screenshot 2026-04-12 181559.png" alt="preview" />
               : <>
                   <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" style={{ opacity: 0.5 }}>
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
