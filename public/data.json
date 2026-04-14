@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "ShopFlow",
+      "subtitle": "Full-Stack E-Commerce Platform",
+      "desc": "A complete e-commerce application with customer shopping, cart management, and a real-time admin dashboard. Features product browsing with category filters, order tracking, live feed updates, and full admin controls for managing orders and inventory.",
+      "features": [
+        "Customer & Admin roles",
+        "Cart & Checkout flow",
+        "Real-time order tracking",
+        "Live order feed"
+      ],
+      "tags": ["JavaScript", "HTML", "CSS", "Node.js"],
+      "status": "Completed",
+      "github": "#",
+      "image": null
+    },
+    {
+      "id": 2,
+      "title": "Mini Project in Java",
+      "subtitle": "Console-Based Shopping List App",
+      "desc": "A Java console application implementing a full shopping list manager. Built using OOP principles with a menu-driven interface to add items, count entries, display the full list, and search for specific items — demonstrating core Java fundamentals.",
+      "features": [
+        "Add & display items",
+        "Count entries",
+        "Item search",
+        "Menu-driven UI"
+      ],
+      "tags": ["Java", "OOP", "Scanner", "Collections"],
+      "status": "Completed",
+      "github": "#",
+      "image": null
+    }
+  ]
+}
