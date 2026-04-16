@@ -733,7 +733,7 @@ function HireModal({ open, onClose }) {
           <div className="dk-resume-section">
             <h4>My Resume</h4>
             <div className="dk-resume-viewer">
-              {/* Replace '/resume.pdf' with your actual resume file path */}
+            
               <object
                 data="/resume.pdf"
                 type="application/pdf"
@@ -750,8 +750,7 @@ function HireModal({ open, onClose }) {
                     <line x1="16" y1="17" x2="8" y2="17" />
                     <polyline points="10,9 9,9 8,9" />
                   </svg>
-                  <p>Resume Not Available</p>
-                  <small>To add your resume:<br />1. Save your resume as 'resume.pdf'<br />2. Place it in the 'public' folder<br />3. Rebuild the project</small>
+                  
                   <a href="/resume.pdf" download style={{ marginTop: '8px', color: 'var(--green)', fontSize: '13px', fontWeight: 600 }}>⬇ Download Resume</a>
                 </div>
               </object>
