@@ -846,7 +846,9 @@ const handleAvatar = async (e) => {
       setAvatar(data.secure_url);
       await setDoc(doc(db, 'settings', 'avatar'), { url: data.secure_url });
     } else {
-      console.error('Upload failed:', data);
+      console.error('Upload failed - Full response:', JSON.stringify(data, null, 2));
+      console.error('Cloud name:', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
+      console.error('Upload preset:', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
     }
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
