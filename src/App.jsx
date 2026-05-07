@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from './firebase';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -735,7 +733,7 @@ function HireModal({ open, onClose }) {
             <div className="dk-resume-viewer">
             
               <object
-                data="/resume.pdf"
+                data="/DivyaKalia_Resume.pdf"
                 type="application/pdf"
                 width="100%"
                 height="500px"
@@ -751,7 +749,7 @@ function HireModal({ open, onClose }) {
                     <polyline points="10,9 9,9 8,9" />
                   </svg>
                   
-                  <a href="/resume.pdf" download style={{ marginTop: '8px', color: 'var(--green)', fontSize: '13px', fontWeight: 600 }}>⬇ Download Resume</a>
+                  <a href="/DivyaKalia_Resume.pdf" download style={{ marginTop: '8px', color: 'var(--green)', fontSize: '13px', fontWeight: 600 }}>⬇ Download Resume</a>
                 </div>
               </object>
             </div>
@@ -829,24 +827,30 @@ useEffect(() => {
   }, []);
 
   // ── Save avatar to Firestore when owner uploads ──
-const handleAvatar = (e) => {
+const handleAvatar = async (e) => {
   if (!isOwner) return;
   const file = e.target.files[0];
   if (!file) return;
 
-  const storageRef = ref(storage, 'avatar/profile.jpg');
-  uploadBytes(storageRef, file).then((snapshot) => {
-    getDownloadURL(snapshot.ref).then(async (downloadURL) => {
-      setAvatar(downloadURL);
-      try {
-        await setDoc(doc(db, 'settings', 'avatar'), { url: downloadURL });
-      } catch (err) {
-        console.error('Error saving avatar URL:', err);
-      }
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+
+  try {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData,
     });
-  }).catch((err) => {
-    console.error('Error uploading avatar:', err);
-  });
+    const data = await response.json();
+    if (data.secure_url) {
+      setAvatar(data.secure_url);
+      await setDoc(doc(db, 'settings', 'avatar'), { url: data.secure_url });
+    } else {
+      console.error('Upload failed:', data);
+    }
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
+  }
 };
 
   const handleOwnerLogin = () => {
@@ -1079,7 +1083,7 @@ const handleAvatar = (e) => {
           </div>
 
           <div className="dk-profile-card">
-            <p className="dk-card-label">Profile Picture</p>
+           
             <div className="dk-avatar-ring" onClick={() => isOwner && avatarRef.current?.click()} style={{ cursor: isOwner ? 'pointer' : 'default' }}>
               <img src={avatar || defaultAvatar} alt="Profile" />
               {isOwner && (
