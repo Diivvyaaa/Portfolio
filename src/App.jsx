@@ -568,7 +568,7 @@ function ProjectEntry({ project, index, onEdit, onDelete, canManage }) {
 
      {project.liveUrl && (
   <a className="dk-github-btn" href={project.liveUrl} target="_blank" rel="noreferrer"
-    style={{ marginTop: "10px" }}
+    style={{ marginTop: "20px" }}
   >
     🌐 View Live Project →
   </a>
@@ -945,6 +945,7 @@ const handleAvatar = async (e) => {
             status: proj.status,
             github: proj.github,
             image: proj.image,
+            liveUrl: proj.liveUrl || "",  
           });
         } catch (error) {
           console.error('Error updating project:', error);
@@ -958,6 +959,7 @@ const handleAvatar = async (e) => {
               status: proj.status,
               github: proj.github,
               image: proj.image,
+              liveUrl: proj.liveUrl || "",  
             });
             savedId = docRef.id;
           } catch (innerError) {
@@ -975,6 +977,7 @@ const handleAvatar = async (e) => {
             status: proj.status,
             github: proj.github,
             image: proj.image,
+            liveUrl: proj.liveUrl || "",  
           });
           savedId = docRef.id;
         } catch (error) {
@@ -994,6 +997,7 @@ const handleAvatar = async (e) => {
           status: proj.status,
           github: proj.github,
           image: proj.image,
+          liveUrl: proj.liveUrl || "",  
         });
         setProjects(prev => [...prev, { ...proj, id: docRef.id }]);
       } catch (error) {
