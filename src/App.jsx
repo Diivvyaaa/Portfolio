@@ -694,17 +694,20 @@ const handleImage = async (e) => {
             <option>Planned</option>
           </select>
         </div>
-
-        <div className="dk-field">
-          <label>GitHub URL</label>
-          <input value={form.github} onChange={e => set("github", e.target.value)} placeholder="https://github.com/..." />
-        </div>
-
-
-      <div className="dk-field">
-          <label>Live Project URL</label>
-          <input value={form.liveUrl || ""} onChange={e => set("liveUrl", e.target.value)} placeholder="https://your-live-site.com" />
-        </div>
+<div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
+  {project.github && project.github !== "#" && (
+    <a className="dk-github-btn" href={project.github} target="_blank" rel="noreferrer">
+      ⎆ View on GitHub →
+    </a>
+  )}
+  {project.liveUrl && (
+    <a className="dk-github-btn" href={project.liveUrl} target="_blank" rel="noreferrer"
+      style={{ marginTop: "0" }}
+    >
+      🌐 View Live Project →
+    </a>
+  )}
+</div>
           
 
 
