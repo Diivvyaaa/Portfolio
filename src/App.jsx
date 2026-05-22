@@ -276,7 +276,7 @@ const css = `
     background: transparent; border: 1px solid var(--border); color: var(--text);
   }
   .dk-github-btn {
-    display: inline-flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 8px;
     padding: 10px 24px; background: var(--green-dark); color: #0d1117;
     border: none; border-radius: 8px; font-weight: 700; font-size: 13px;
     cursor: pointer; font-family: var(--font); text-decoration: none;
