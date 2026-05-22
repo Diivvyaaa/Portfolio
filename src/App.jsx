@@ -60,6 +60,7 @@ const EMPTY_FORM = {
   tags: "",
   status: "Completed",
   github: "",
+  liveUrl: "", 
   image: null,
 };
 
@@ -564,6 +565,18 @@ function ProjectEntry({ project, index, onEdit, onDelete, canManage }) {
           ⎆ View on GitHub →
         </a>
       )}
+
+     {project.liveUrl && (
+          <a className="dk-github-btn"
+          href={project.liveUrl}
+          target="_blank"
+          rel="noreferrer"
+          style={{ marginTop: "10px", display: "inline-flex", background: "transparent", color: "var(--green)", border: "1px solid var(--green)" }}
+        >
+          🌐 View Live Project →
+        </a>
+      )}
+    
       {canManage && (
         <div className="dk-proj-actions">
           <button className="dk-edit-btn" onClick={() => onEdit(index)}>Edit</button>
@@ -571,6 +584,7 @@ function ProjectEntry({ project, index, onEdit, onDelete, canManage }) {
         </div>
       )}
     </div>
+    
   );
 
   const screenshot = <ScreenshotBox image={project.image} />;
@@ -628,6 +642,7 @@ const handleImage = async (e) => {
       desc: form.desc,
       image: form.image,
       github: form.github,
+      liveUrl: form.liveUrl,
       status: form.status,
       id: editIndex >= 0 ? initialData.id : Date.now(),
       features: form.features.split("\n").map(s => s.trim()).filter(Boolean),
@@ -687,6 +702,16 @@ const handleImage = async (e) => {
           <label>GitHub URL</label>
           <input value={form.github} onChange={e => set("github", e.target.value)} placeholder="https://github.com/..." />
         </div>
+
+
+      <div className="dk-field">
+          <label>Live Project URL</label>
+          <input value={form.liveUrl || ""} onChange={e => set("liveUrl", e.target.value)} placeholder="https://your-live-site.com" />
+        </div>
+          
+
+
+
 
         <div className="dk-field">
           <label>Screenshot</label>
@@ -886,6 +911,7 @@ const handleAvatar = async (e) => {
       ...p,
       features: (p.features || []).join("\n"),
       tags: (p.tags || []).join(", "),
+      liveUrl: p.liveUrl || "",
     });
     setModalOpen(true);
   };
