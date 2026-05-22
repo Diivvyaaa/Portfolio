@@ -567,15 +567,12 @@ function ProjectEntry({ project, index, onEdit, onDelete, canManage }) {
       )}
 
      {project.liveUrl && (
-          <a className="dk-github-btn"
-          href={project.liveUrl}
-          target="_blank"
-          rel="noreferrer"
-          style={{ marginTop: "10px", display: "inline-flex", background: "transparent", color: "var(--green)", border: "1px solid var(--green)" }}
-        >
-          🌐 View Live Project →
-        </a>
-      )}
+  <a className="dk-github-btn" href={project.liveUrl} target="_blank" rel="noreferrer"
+    style={{ marginTop: "10px" }}
+  >
+    🌐 View Live Project →
+  </a>
+)}
     
       {canManage && (
         <div className="dk-proj-actions">
