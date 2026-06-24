@@ -687,16 +687,39 @@ const handleImage = async (e) => {
         </div>
 
         <div className="dk-field">
-          <label>Status</label>
-          <select value={form.status} onChange={e => set("status", e.target.value)}>
-            <option>Completed</option>
-            <option>In Progress</option>
-            <option>Planned</option>
-          </select>
-        </div>
+  <label>Status</label>
+  <select
+    value={form.status}
+    onChange={e => set("status", e.target.value)}
+  >
+    <option>Completed</option>
+    <option>In Progress</option>
+    <option>Planned</option>
+  </select>
+</div>
 
-           <div className="dk-field">
-          <label>Screenshot</label>
+<div className="dk-field">
+  <label>GitHub Repository Link</label>
+  <input
+    type="url"
+    value={form.github || ""}
+    onChange={(e) => set("github", e.target.value)}
+    placeholder="https://github.com/username/project"
+  />
+</div>
+
+<div className="dk-field">
+  <label>Live Project Link</label>
+  <input
+    type="url"
+    value={form.liveUrl || ""}
+    onChange={(e) => set("liveUrl", e.target.value)}
+    placeholder="https://yourproject.vercel.app"
+  />
+</div>
+
+<div className="dk-field">
+  <label>Screenshot</label>
           <div className="dk-upload-zone" onClick={() => fileRef.current.click()}>
             {form.image
               ? <img src={form.image} alt="preview" />
