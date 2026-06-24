@@ -820,10 +820,10 @@ useEffect(() => {
   const loadProjects = async () => {
     try {
       const snapshot = await getDocs(collection(db, 'projects'));
-     const firestoreProjects = snapshot.docs.map((document) => ({
-  id: document.id,
-  ...document.data(),
-}));
+      const firestoreProjects = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      }));
       if (firestoreProjects.length > 0) {
         setProjects(firestoreProjects);
       }
