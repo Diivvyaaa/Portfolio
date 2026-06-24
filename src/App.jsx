@@ -694,29 +694,7 @@ const handleImage = async (e) => {
             <option>Planned</option>
           </select>
         </div>
-<div className="flex gap-3 mt-4">
-  {initialData?.github && (
-    <a
-      href={initialData.github}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="px-4 py-2 bg-gray-800 text-white rounded-lg"
-    >
-      GitHub
-    </a>
-  )}
 
-  {initialData?.liveUrl && (
-    <a
-      href={initialData.liveUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-    >
-      Live Demo
-    </a>
-  )}
-</div>
            <div className="dk-field">
           <label>Screenshot</label>
           <div className="dk-upload-zone" onClick={() => fileRef.current.click()}>
