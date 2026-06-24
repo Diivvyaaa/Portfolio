@@ -694,26 +694,8 @@ const handleImage = async (e) => {
             <option>Planned</option>
           </select>
         </div>
-<div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
-  {project.github && project.github !== "#" && (
-    <a className="dk-github-btn" href={project.github} target="_blank" rel="noreferrer">
-      ⎆ View on GitHub →
-    </a>
-  )}
-  {project.liveUrl && (
-    <a className="dk-github-btn" href={project.liveUrl} target="_blank" rel="noreferrer"
-      style={{ marginTop: "0" }}
-    >
-      🌐 View Live Project →
-    </a>
-  )}
-</div>
-          
 
-
-
-
-        <div className="dk-field">
+           <div className="dk-field">
           <label>Screenshot</label>
           <div className="dk-upload-zone" onClick={() => fileRef.current.click()}>
             {form.image
