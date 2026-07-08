@@ -763,7 +763,7 @@ function HireModal({ open, onClose }) {
             <div className="dk-resume-viewer">
             
               <object
-                data="/DivyaKalia_Resume.pdf"
+                data="/DivyaResume.pdf"
                 type="application/pdf"
                 width="100%"
                 height="500px"
